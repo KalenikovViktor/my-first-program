@@ -7,7 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "first-app", "first-app\firs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lession-data-types", "lession-data-types\lession-data-types.csproj", "{3EA08835-6622-4B60-B1E1-4C42F5B9878E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson-3-condition-loop", "lesson-3-condition-loop\lesson-3-condition-loop.csproj", "{1906D145-DF6D-42B8-8F96-CD823E20D66C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
