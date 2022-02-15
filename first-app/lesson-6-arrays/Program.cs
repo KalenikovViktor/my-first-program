@@ -27,8 +27,6 @@ namespace lesson_6_arrays
                 Console.WriteLine($"{i} item of array is {array[i]}");
             }
 
-            int q = 0;
-            q = 0;
             Console.WriteLine("------------------------------------");
 
             for (i = 0; i < array1.Length; i++)
@@ -132,15 +130,12 @@ namespace lesson_6_arrays
             return copy;
         }
 
-        static int[] MultipleByNumber(int[] array, int multiplier)
+        static void MultipleByNumber(int[] array, int multiplier)
         {
             for (int i = 0; i < array.Length; i++)
             {
                 array[i] *= multiplier;
             }
-
-            multiplier = 10;
-            return array;
         }
     }
 }
