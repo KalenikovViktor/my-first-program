@@ -65,7 +65,7 @@ namespace lesson_7_strings
             Console.WriteLine(emptyString);
             Console.WriteLine(stringBuilder.ToString());
 
-            
+            // just add comment
             string input = Console.ReadLine();
             string ouput = string.Empty;
             foreach (var item in input)
