@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace lesson_8_text
@@ -13,6 +14,7 @@ namespace lesson_8_text
             string[] randomNames;
             string[] names;
 
+            Console.WriteLine(Guid.NewGuid().ToString());
             try
             {
                 randomNames = FromFile(namesFile);
@@ -35,11 +37,11 @@ namespace lesson_8_text
                 Console.WriteLine("Finally block");
             }
 
-            var book = Deserialize(names);          //convert strings to .net object
+            (Guid id, string name, int number)[] book = Deserialize(names);          //convert strings to .net object
             Add(ref book, GenerateRecord(randomNames));
             try
             {
-                Update(book, GenerateRecord(randomNames), 1000);
+                Update(book, GenerateRecord(randomNames), 0);
             }
             catch (Exception e)
             {
@@ -151,7 +153,26 @@ namespace lesson_8_text
             return (names[random.Next(names.Length)], random.Next());
         }
 
-        private static string[] FromFile(string filePath) => File.ReadAllLines(filePath);
+        private static string[] FromFile(string filePath)
+        {
+            StreamReader reader;
+
+            using (reader = new StreamReader(filePath, Encoding.Default))
+            {
+                
+            }
+
+            try
+            {
+                reader = new StreamReader(filePath, Encoding.Default);
+            }
+            finally
+            {
+                reader.Dispose();
+            }
+
+            return File.ReadAllLines(filePath);
+        }
 
         private static void ToFile(string[] content, string filePath)
         {
@@ -164,13 +185,13 @@ namespace lesson_8_text
             for (var i = 0; i < content.Length; i++)
             {
                 var (name, number) = content[i];
-                toFile[i] = $"{name};{number}";
+                toFile[i] = $"{Guid.NewGuid()};{name};{number}";
             }
 
             return toFile;
         }
 
-        private static (string name, int number)[] Deserialize(string[] names)
+        private static (Guid id, string name, int number)[] Deserialize(string[] names)
         {
             var regex = new Regex(@"^(\w+);(\d+)$");
             var book = new (string name, int number)[names.Length];
