@@ -6,7 +6,7 @@ namespace lesson_8_text
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             string filePath = "Phone Book.csv";
             string namesFile = "names.list";        //contains names list in order to be able generate a new record
@@ -48,6 +48,7 @@ namespace lesson_8_text
             book[index] = record;
         }
 
+        // ReSharper disable once UnusedMember.Local
         private static void Delete(ref (string name, int number)[] book, int index)
         {
             var newBook = new (string name, int number)[book.Length - 1];
