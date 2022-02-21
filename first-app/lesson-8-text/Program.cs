@@ -9,15 +9,44 @@ namespace lesson_8_text
         private static void Main()
         {
             string filePath = "Phone Book.csv";
-            string namesFile = "names.list";        //contains names list in order to be able generate a new record
-            string[] randomNames = FromFile(namesFile);
-            string[] names = FromFile(filePath);
+            string namesFile = "names.list";
+            string[] randomNames;
+            string[] names;
+
+            try
+            {
+                randomNames = FromFile(namesFile);
+                names = FromFile(filePath);
+            }
+            catch (FileNotFoundException exception)
+            {
+                Console.WriteLine($"Error: {exception.Message}, type {exception.GetType()}");
+                randomNames = new[] { "Nick" };
+                names = new string[0];
+            }
+            catch (ArgumentNullException exception)
+            {
+                Console.WriteLine($"Error: {exception.Message}, type {exception.GetType()}");
+                randomNames = new string[0];
+                names = new string[0];
+            }
+            finally
+            {
+                Console.WriteLine("Finally block");
+            }
 
             var book = Deserialize(names);          //convert strings to .net object
             Add(ref book, GenerateRecord(randomNames));
-            Update(book, GenerateRecord(randomNames), 0);
+            try
+            {
+                Update(book, GenerateRecord(randomNames), 1000);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
             //Delete(ref book, 0);
-            
+
             Console.WriteLine("Here is all list");
             Print(book);
 
@@ -45,7 +74,15 @@ namespace lesson_8_text
 
         private static void Update((string name, int number)[] book, (string name, int number) record, int index)
         {
-            book[index] = record;
+            try
+            {
+                book[index] = record;
+            }
+            catch (IndexOutOfRangeException exception)
+            {
+                Console.WriteLine(exception.Message);
+                throw new Exception($"Index = {index}", exception);
+            }
         }
 
         // ReSharper disable once UnusedMember.Local
