@@ -52,13 +52,13 @@ namespace lesson_8_text
             Console.WriteLine("Here is all list");
             Print(book);
 
-            Console.WriteLine($"{BinarySearch(book, x => x.name, "Maria")} was fount by name");
-            Console.WriteLine($"{BinarySearch(book, x => x.number, 1430127282)} was fount by number");
+            Console.WriteLine($"{BinarySearch(book, x => x.name, "Maria")} was found by name");
+            Console.WriteLine($"{BinarySearch(book, x => x.number, 1430127282)} was founb by number");
 
             ToFile(Serialize(book), filePath);
         }
 
-        private static void Print((string name, int number)[] book)
+        private static void Print((Guid guid, string name, int number)[] book)
         {
             foreach (var item in book)
             {
@@ -66,15 +66,15 @@ namespace lesson_8_text
             }
         }
 
-        private static void Add(ref (string name, int number)[] book, (string name, int number) newRecord)
+        private static void Add(ref (Guid guid, string name, int number)[] book, (Guid guid, string name, int number) newRecord)
         {
-            var newBook = new (string name, int number)[book.Length + 1];
+            var newBook = new (Guid guid, string name, int number)[book.Length + 1];
             book.CopyTo(newBook, 0);
             newBook[book.Length] = newRecord;
             book = newBook;
         }
 
-        private static void Update((string name, int number)[] book, (string name, int number) record, int index)
+        private static void Update((Guid guid, string name, int number)[] book, (Guid guid, string name, int number) record, int index)
         {
             try
             {
@@ -103,9 +103,9 @@ namespace lesson_8_text
             book = newBook;
         }
 
-        private static (string name, int number)[] AsSorted<T>((string name, int number)[] book, Func<(string name, int number), T> selector) where T: IComparable
+        private static (Guid guid, string name, int number)[] AsSorted<T>((Guid guid, string name, int number)[] book, Func<(Guid guid, string name, int number), T> selector) where T : IComparable
         {
-            var newBook = new (string name, int number)[book.Length];
+            var newBook = new (Guid guid, string name, int number)[book.Length];
             book.CopyTo(newBook, 0);
             for (var i = 0; i < newBook.Length; i++)
             {
@@ -121,10 +121,10 @@ namespace lesson_8_text
             return newBook;
         }
 
-        private static (string name, int number)? BinarySearch<T>((string name, int number)[] book, Func<(string name, int number), T> selector, T searchedValue)
+        private static (Guid guid, string name, int number)? BinarySearch<T>((Guid guid, string name, int number)[] book, Func<(Guid guid, string name, int number), T> selector, T searchedValue)
             where T : IComparable
         {
-            (string name, int number)? MiddleValue((string name, int number)[] valueTuples, Func<(string name, int number), T> func, T comparable, int first, int last)
+            (Guid guid, string name, int number)? MiddleValue((Guid guid, string name, int number)[] valueTuples, Func<(Guid guid, string name, int number), T> func, T comparable, int first, int last)
             {
                 if (first > last)
                 {
@@ -147,30 +147,15 @@ namespace lesson_8_text
             return MiddleValue(AsSorted(book, selector), selector, searchedValue, 0, book.Length);
         }
 
-        private static (string name, int number) GenerateRecord(string[] names)
+        private static (Guid guid, string name, int number) GenerateRecord(string[] names)
         {
             var random = new Random();
-            return (names[random.Next(names.Length)], random.Next());
+            //Guid guid;
+            return (Guid.NewGuid(), names[random.Next(names.Length)], random.Next());
         }
 
         private static string[] FromFile(string filePath)
         {
-            StreamReader reader;
-
-            using (reader = new StreamReader(filePath, Encoding.Default))
-            {
-                
-            }
-
-            try
-            {
-                reader = new StreamReader(filePath, Encoding.Default);
-            }
-            finally
-            {
-                reader.Dispose();
-            }
-
             return File.ReadAllLines(filePath);
         }
 
@@ -179,12 +164,12 @@ namespace lesson_8_text
             File.WriteAllLines(filePath, content);
         }
 
-        private static string[] Serialize((string name, int number)[] content)
+        private static string[] Serialize((Guid guid, string name, int number)[] content)
         {
             var toFile = new string[content.Length];
             for (var i = 0; i < content.Length; i++)
             {
-                var (name, number) = content[i];
+                var (guid, name, number) = content[i];
                 toFile[i] = $"{Guid.NewGuid()};{name};{number}";
             }
 
@@ -194,7 +179,7 @@ namespace lesson_8_text
         private static (Guid id, string name, int number)[] Deserialize(string[] names)
         {
             var regex = new Regex(@"^(\w+);(\d+)$");
-            var book = new (string name, int number)[names.Length];
+            var book = new (Guid guid, string name, int number)[names.Length];
             for (var index = 0; index < names.Length; index++)
             {
                 var item = names[index];
